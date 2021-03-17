@@ -1,24 +1,11 @@
 require('dotenv').config()
 const express = require('express')
-const AWS = require('aws-sdk')
 const app = express()
 const server = express()
-const port = 3000
-const base_url = '/'
+const port = process.env.API_PORT || 3000
+const base_url = process.env.BASE_URL || '/'
 
-// make sure and create a .env file and define the variables
-// AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
-// these can be found by going to portal, clicking name at top right, selecting my security credentials
-// here you can create an access key
-
-AWS.config.update({
-    endpoint: 'dynamodb.us-east-1.amazonaws.com',
-    region: 'us-east-1',
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-});
-
-const docClient = new AWS.DynamoDB.DocumentClient();
+const dynamo = require('./dynamo')
 
 app.use(express.json())
 app.use(function (req, res, next) {
@@ -32,51 +19,19 @@ app.get('/healthcheck', (req, res) => {
     res.status(200).send("Connection Success");
 })
 
-
 server.use(base_url, app)
 server.listen(port, () => {
   console.log(`App running at base url ${base_url} with port ${port}.`)
 })
 
-// params for GetItem
-var params = {
-  TableName: "user_profile",
-  Key: {
-    "UUID": "24086hqw03r8ejta0dut0a",
-  },
-};
-
-// get item in user_profile table with UUID 24086hqw03r8ejta0dut0a
-docClient.get(params, function(err, data) {
-  if (err) {
-      console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
-  } else {
-      console.log("GetItem succeeded.", JSON.stringify(data, null, 2));
-  }
+app.get('/getUser', (req, res) => {
+  dynamo.getUser(req.query.uuid)
+  .then(response => res.status(200).send(response))
+  .catch(error => res.status(500).send(error))
 });
 
-// params for UpdateItem
-var params = {
-  TableName: "user_profile",
-  Key: {
-    "UUID": "24086hqw03r8ejta0dut0a",
-  },
-  UpdateExpression: "set #name = :n",
-  ExpressionAttributeNames: { // use because Name is reserved word in DynamoDB
-    "#name" : "Name",
-  },
-  ExpressionAttributeValues: {
-    ":n" : "Anshul Modh",
-  },
-  ReturnValues:"UPDATED_NEW", // return only updated values
-};
-
-// update item in user_profile table with UUID 24086hqw03r8ejta0dut0a
-// change Name to Anshul Modh
-docClient.update(params, function(err, data) {
-  if (err) {
-      console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
-  } else {
-      console.log("UpdateItem succeeded.", JSON.stringify(data, null, 2));
-  }
+app.get('/getDocument', (req, res) => {
+  dynamo.getDocument(req.query.tableName, req.query.uuid)
+  .then(response => res.status(200).send(response))
+  .catch(error => res.status(500).send(error))
 });
