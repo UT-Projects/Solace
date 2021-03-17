@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const AWS = require('aws-sdk')
 const app = express()
@@ -5,8 +6,16 @@ const server = express()
 const port = 3000
 const base_url = '/'
 
+// make sure and create a .env file and define the variables
+// AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
+// these can be found by going to portal, clicking name at top right, selecting my security credentials
+// here you can create an access key
+
 AWS.config.update({
-    endpoint: 'dynamodb.us-east-1.amazonaws.com'
+    endpoint: 'dynamodb.us-east-1.amazonaws.com',
+    region: 'us-east-1',
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
 
 const docClient = new AWS.DynamoDB.DocumentClient();
@@ -28,13 +37,6 @@ server.use(base_url, app)
 server.listen(port, () => {
   console.log(`App running at base url ${base_url} with port ${port}.`)
 })
-
-
-
-
-// amazon uses environment variables AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and AWS_REGION
-// these can be found by going to portal, clicking name at top right, selecting my security credentials, region is us-east-1
-// make sure and restart terminal after setting variables
 
 // params for GetItem
 var params = {
@@ -70,7 +72,7 @@ var params = {
 };
 
 // update item in user_profile table with UUID 24086hqw03r8ejta0dut0a
-// change Name Anshul Mode -> Anshul Modh
+// change Name to Anshul Modh
 docClient.update(params, function(err, data) {
   if (err) {
       console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
