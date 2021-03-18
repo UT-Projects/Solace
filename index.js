@@ -35,3 +35,15 @@ app.get('/getDocument', (req, res) => {
   .then(response => res.status(200).send(response))
   .catch(error => res.status(500).send(error))
 });
+
+app.post('/updateDocument', (req, res) => {
+  dynamo.updateDocument(req.body.tableName, req.body.uuid, req.body.key, req.body.value)
+  .then(response => res.status(200).send(response))
+  .catch(error => res.status(500).send(error))
+});
+
+app.post('/updateUser', (req, res) => {
+  dynamo.updateUser(req.body.uuid, req.body.key, req.body.value)
+  .then(response => res.status(200).send(response))
+  .catch(error => res.status(500).send(error))
+});
