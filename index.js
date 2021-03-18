@@ -15,35 +15,33 @@ app.use(function (req, res, next) {
     next();
   });
 
+const noErrorHandle = (res, future) => {
+  future
+  .then(response => res.status(200).send(response))
+  .catch(error => res.status(500).send(error))
+}
+
 app.get('/healthcheck', (req, res) => {
-    res.status(200).send("Connection Success");
+  res.status(200).send("Connection Success");
 })
+
+app.get('/getUser', (req, res) => {
+  noErrorHandle(res, dynamo.getUser(req.query.uuid))
+});
+
+app.get('/getDocument', (req, res) => {
+  noErrorHandle(res, dynamo.getDocument(req.query.tableName, req.query.uuid))
+});
+
+app.post('/updateDocument', (req, res) => {
+  noErrorHandle(res, dynamo.updateDocument(req.body.tableName, req.body.uuid, req.body.key, req.body.value))
+});
+
+app.post('/updateUser', (req, res) => {
+  noErrorHandle(res, dynamo.updateUser(req.body.uuid, req.body.key, req.body.value))
+});
 
 server.use(base_url, app)
 server.listen(port, () => {
   console.log(`App running at base url ${base_url} with port ${port}.`)
 })
-
-app.get('/getUser', (req, res) => {
-  dynamo.getUser(req.query.uuid)
-  .then(response => res.status(200).send(response))
-  .catch(error => res.status(500).send(error))
-});
-
-app.get('/getDocument', (req, res) => {
-  dynamo.getDocument(req.query.tableName, req.query.uuid)
-  .then(response => res.status(200).send(response))
-  .catch(error => res.status(500).send(error))
-});
-
-app.post('/updateDocument', (req, res) => {
-  dynamo.updateDocument(req.body.tableName, req.body.uuid, req.body.key, req.body.value)
-  .then(response => res.status(200).send(response))
-  .catch(error => res.status(500).send(error))
-});
-
-app.post('/updateUser', (req, res) => {
-  dynamo.updateUser(req.body.uuid, req.body.key, req.body.value)
-  .then(response => res.status(200).send(response))
-  .catch(error => res.status(500).send(error))
-});
