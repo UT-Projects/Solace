@@ -3,6 +3,7 @@ import sys
 import uuid
 import names
 import random
+import json
 
 def createUsers(num, url):
     for i in range(num):
@@ -10,20 +11,25 @@ def createUsers(num, url):
             sex = "female"
         else:
             sex = "male"
-        data = {    
-            "UUID": str(uuid.uuid4()),
-            "Name": names.get_full_name(),
-            "Age": random.randint(18, 100),
-            "Sex": sex,
-            "Email": "someboody@inbox.email.message.eu.com"
+        payload = {    
+            "uuid": str(uuid.uuid4()),
+            "name": names.get_full_name(),
+            "age": random.randint(18, 100),
+            "sex": sex,
+            "email": "someboody@inbox.email.message.eu.com"
         }
-        response = requests.post(url, data=data)
-        print(response)
+        # Content-Type:application/json
+        headers = {'Content-Type': 'application/json'}
+        response = requests.post(url + "createUser", data=json.dumps(payload), headers=headers)
+        print(response.text, response.status_code)
 
 def main():
     if (len(sys.argv) > 1):
-        createUsers(sys.argv[1], sys.argv[2] + ":" + sys.argv[3])
+        try: 
+            createUsers(int(sys.argv[1]), sys.argv[2])
+        except:
+            print("invalid input")
     else:
-        print("Missing required parameters: number of users, url, port")
+        print("Missing required parameters: number of users, url")
 
 main()

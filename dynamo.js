@@ -57,12 +57,12 @@ const updateDocument = (tableName, uuid, key, value) => {
     })
 }
 
-const createDocument = (tableName, partitionKey, sortKey, item) => {
+const createDocument = (tableName, item) => {
     var params = {
         TableName: tableName,
         Item: item,
-        ConditionExpression: "{partitionKey} <> :yearKeyVal AND #title <>  :title",
-        ReturnValues: "NONE | ALL_OLD | UPDATED_OLD | ALL_NEW | UPDATED_NEW",
+        // ConditionExpression: "{partitionKey} <> :yearKeyVal AND #title <>  :title",
+        // ReturnValues: "NONE | ALL_OLD | UPDATED_OLD | ALL_NEW | UPDATED_NEW",
     };
 
     return new Promise(function(resolve, reject) {
