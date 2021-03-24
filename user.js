@@ -11,7 +11,6 @@ const updateUser = (uuid, key, value) => {
 }
 
 const createUser = (uuid, name, age, sex, email) => {
-    console.log(name)
     item = {
         "UUID": uuid,
         "Name": name,
