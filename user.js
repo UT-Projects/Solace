@@ -10,11 +10,11 @@ const updateUser = (uuid, key, value) => {
     return dynamo.updateDocument("user_profile", uuid, key, value);
 }
 
-const createUser = (uuid, name, age, sex, email) => {
+const createUser = (uuid, name, birthdate, sex, email) => {
     item = {
         "uuid": uuid,
         "name": name,
-        "age": age,
+        "birthdate": birthdate,
         "sex": sex,
         "email": email
     }

@@ -1,3 +1,4 @@
+
 // const validateEmail = (email) => {
 //     // check for @ sign
 //     var atSymbol = email.indexOf("@");

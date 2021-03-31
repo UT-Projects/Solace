@@ -40,29 +40,68 @@ app.get('/getUser', (req, res) => {
 // });
 
 app.put('/updateUser', (req, res) => {
+
+    switch (req.body.key) {
+        case "uuid":
+            if(!validate.validateUUIDFormat(req.body.value)) {
+                res.status(400).send("Invalid UUID");
+                return;
+            }
+            break;
+        case "name":
+            if(req.body.value === "") {
+                res.status(400).send("Invalid Name");
+                return;
+            }
+            break;
+        case "birthdate":
+            if(!Number.isFinite(birthdate)) {
+                res.status(400).send("Invalid Birthdate");
+                return;
+            }
+            break;
+        case "sex":
+            req.body.value = req.body.value.toLowerCase();
+            if(req.body.value != "male" && req.body.value != "female") {
+                res.status(400).send("Invalid Sex");
+                return;
+            }
+            break;
+        case "email":
+            if (!validate.validateEmail(req.body.value)) {
+                res.status(400).send("Invalid Email");
+                return;
+            }
+            break;
+        default:
+            res.status(400).send("Invalid Key");
+            return;
+    }
+
     noErrorHandle(res, user.updateUser(req.body.uuid, req.body.key, req.body.value))
 });
 
 app.post('/createUser', (req, res) => {
-    [uuid, n, age, sex, email] = [req.body.uuid, req.body.name, req.body.age, req.body.sex.toLowerCase(), req.body.email];
-    //Error check age
-
-    if(!Number.isInteger(age)) {
-        res.status(400).send("Invalid age");
-    }
+    [uuid, n, birthdate, sex, email] = [req.body.uuid, req.body.name, req.body.birthdate, req.body.sex.toLowerCase(), req.body.email];
     
-    //Error check sex
-    else if(sex !== 'male' && sex !== 'female') {
-        res.status(400).send("Invalid sex");
-    }
+    if(!validate.validateUUIDFormat(uuid))
+        res.status(400).send("Invalid UUID");
 
-    //Error check uuid
-    else if(!validate.validateUUIDFormat(uuid)) {
-        res.status(400).send("Invalid UUID Format");
-    }
-    else {
-        noErrorHandle(res, user.createUser(uuid, n, age, sex, email))
-    }
+    else if(n === "")
+        res.status(400).send("Invalid Name");
+
+    else if(!Number.isFinite(birthdate))
+        res.status(400).send("Invalid Birthdate");
+
+    else if(sex != "male" && sex != "female")
+        res.status(400).send("Invalid Sex");
+
+    else if (!validate.validateEmail(email))
+        res.status(400).send("Invalid Email");
+
+    else
+        noErrorHandle(res, user.createUser(uuid, n, birthdate, sex, email));
+        
 });
 
 app.delete('/deleteUser', (req, res) => {

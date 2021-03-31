@@ -12,6 +12,7 @@ AWS.config.update({
 
 const dynamodb = new AWS.DynamoDB();
 
+
 var params = {
     TableName : "user_profile",
     KeySchema: [       
