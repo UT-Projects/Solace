@@ -15,10 +15,10 @@ const dynamodb = new AWS.DynamoDB();
 var params = {
     TableName : "user_profile",
     KeySchema: [       
-        { AttributeName: "UUID", KeyType: "HASH"},  //Partition key
+        { AttributeName: "uuid", KeyType: "HASH"},  //Partition key
     ],
     AttributeDefinitions: [       
-        { AttributeName: "UUID", AttributeType: "S" },
+        { AttributeName: "uuid", AttributeType: "S" },
     ],
     ProvisionedThroughput: {       
         ReadCapacityUnits: 1, 

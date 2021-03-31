@@ -12,18 +12,18 @@ const updateUser = (uuid, key, value) => {
 
 const createUser = (uuid, name, age, sex, email) => {
     item = {
-        "UUID": uuid,
-        "Name": name,
-        "Age": age,
-        "Sex": sex,
-        "Email": email
+        "uuid": uuid,
+        "name": name,
+        "age": age,
+        "sex": sex,
+        "email": email
     }
     return dynamo.createDocument("user_profile", item);
 }
 
 const deleteUser = (uuid) => {
     primaryKey = {
-        "UUID": uuid
+        "uuid": uuid
     }
     return dynamo.deleteDocument("user_profile", primaryKey);
 }

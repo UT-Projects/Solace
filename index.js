@@ -65,6 +65,10 @@ app.post('/createUser', (req, res) => {
     }
 });
 
+app.delete('/deleteUser', (req, res) => {
+    noErrorHandle(res, user.deleteUser(req.query.uuid))
+});
+
 server.use(base_url, app);
 server.listen(port, () => {
   console.log(`App running at base url ${base_url} with port ${port}.`)

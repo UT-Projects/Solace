@@ -14,7 +14,7 @@ const getDocument = (tableName, uuid) => {
     var params = {
         TableName: tableName,
         Key: {
-            "UUID": uuid,
+            "uuid": uuid,
         },
     };
     
@@ -33,7 +33,7 @@ const updateDocument = (tableName, uuid, key, value) => {
     var params = {
         TableName: tableName,
         Key: {
-            "UUID": uuid,
+            "uuid": uuid,
         },
         UpdateExpression: "set #name = :n",
         ExpressionAttributeNames: { // use because key might be reserved word in DynamoDB
@@ -60,8 +60,10 @@ const createDocument = (tableName, item) => {
     var params = {
         TableName: tableName,
         Item: item,
-        // ConditionExpression: "{partitionKey} <> :yearKeyVal AND #title <>  :title",
-        // ReturnValues: "NONE | ALL_OLD | UPDATED_OLD | ALL_NEW | UPDATED_NEW",
+        ConditionExpression: "attribute_not_exists(#uuid)",
+        ExpressionAttributeNames: {
+            "#uuid": "uuid",
+        },
     };
 
     return new Promise(function(resolve, reject) {
@@ -82,7 +84,7 @@ const deleteDocument = (tableName, primaryKey) => {
     };
 
     return new Promise(function(resolve, reject) {
-        docClient.delete(params, function(err, data) {
+        docClient.delete(params, function(error, data) {
             if (error) {
                 reject(JSON.stringify(error, null, 2));
             } else {
