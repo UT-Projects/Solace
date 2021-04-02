@@ -5,6 +5,7 @@ import names
 import random
 import json
 import datetime
+import calendar
 
 def createUsers(num, url):
     for i in range(num):
@@ -30,8 +31,8 @@ def random_birthdate():
     delta = latest - earliest
     int_delta = (delta.days * 24 * 60 * 60) + delta.seconds    
     random_second = random.randrange(int_delta)
-
-    return earliest + datetime.timedelta(seconds = random_second)
+    date = earliest + datetime.timedelta(seconds = random_second)
+    return calendar.timegm(date.timetuple())
 
 def random_date():
     randomYear = random.randrange(1920, 2010)
@@ -55,8 +56,8 @@ def main():
     if (len(sys.argv) > 1):
         try: 
             createUsers(int(sys.argv[1]), sys.argv[2])
-        except:
-            print("invalid input")
+        except Exception as e:
+            print(e)
     else:
         print("Missing required parameters: number of users, url")
 
