@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/UT-Projects/solace-backend/branch/master/graph/badge.svg?token=I1PTICJCCF)](https://codecov.io/gh/UT-Projects/solace-backend)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
