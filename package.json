@@ -16,7 +16,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test": "",
+    "test": "unitTests/runTestSuite.sh",
     "stop": "pkill npm"
   },
   "eslintConfig": {
