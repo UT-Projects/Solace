@@ -2,19 +2,19 @@ import pytest
 import os
 import time
 import requests
-import boto3
-from dotenv import load_dotenv
+# import boto3
+# from dotenv import load_dotenv
 
-load_dotenv()
+# load_dotenv()
 
-def createuserdatatable():
-    try:
-        session = boto3.session.Session()
-        dynamodb = session.resource('dynamodb', endpoint_url='http://localhost:8000/')
-        table = dynamodb.create_table(TableName="user_profile",KeySchema=[{ 'AttributeName': "uuid", 'KeyType': "HASH" }],AttributeDefinitions=[{ 'AttributeName': "uuid", 'AttributeType': "S" }],ProvisionedThroughput={'ReadCapacityUnits': 1,'WriteCapacityUnits': 1} )
-        return table.table_status
-    except Exception as e:
-        return "Did not create: " + str(e)
+# def createuserdatatable():
+#     try:
+#         session = boto3.session.Session()
+#         dynamodb = session.resource('dynamodb', endpoint_url='http://localhost:8000/')
+#         table = dynamodb.create_table(TableName="user_profile",KeySchema=[{ 'AttributeName': "uuid", 'KeyType': "HASH" }],AttributeDefinitions=[{ 'AttributeName': "uuid", 'AttributeType': "S" }],ProvisionedThroughput={'ReadCapacityUnits': 1,'WriteCapacityUnits': 1} )
+#         return table.table_status
+#     except Exception as e:
+#         return "Did not create: " + str(e)
 
 def healthcheck():
     max_tries = 50
