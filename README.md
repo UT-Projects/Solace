@@ -1,5 +1,5 @@
 [![codecov](https://codecov.io/gh/UT-Projects/solace-backend/branch/master/graph/badge.svg?token=I1PTICJCCF)](https://codecov.io/gh/UT-Projects/solace-backend)
-[![Node.js CI](https://github.com/UT-Projects/solace-backend/actions/workflows/test.yml/badge.svg?event=release)](https://github.com/UT-Projects/solace-backend/actions/workflows/test.yml)
+[![Node.js CI](https://github.com/UT-Projects/solace-backend/actions/workflows/test.yml/badge.svg)](https://github.com/UT-Projects/solace-backend/actions/workflows/test.yml)
 
 # Getting Started with Create React App
 
