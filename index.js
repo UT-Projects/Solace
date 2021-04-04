@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const app = express()
 const server = express()
+const handling = express()
 const port = process.env.API_PORT || 3000
 const base_url = process.env.BASE_URL || '/'
 
@@ -111,4 +112,17 @@ app.delete('/deleteUser', (req, res) => {
 server.use(base_url, app);
 server.listen(port, () => {
   console.log(`App running at base url ${base_url} with port ${port}.`)
+});
+
+var http = require("http");
+const execution = http.createServer(handling);
+execution.listen(80, () => {
+    console.log('HTTP server listening on port 80');
+});
+
+const io = require('socket.io')(execution);
+io.on('connection', (socketServer) => {
+  socketServer.on('npmStop', () => {
+    process.exit(0);
+  });
 });
