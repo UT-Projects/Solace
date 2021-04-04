@@ -9,7 +9,8 @@ load_dotenv()
 
 def createuserdatatable():
     try:
-        dynamodb = boto3.resource('dynamodb', aws_access_key="anything", aws_secret_access_key="anything", region_name="us-east-1", endpoint_url="http://localhost:8000/")
+        session = boto3.session.Session(aws_access_key="anything", aws_secret_access_key="anything", region_name="us-east-1")
+        dynamodb = session.resource('dynamodb', endpoint_url='http://localhost:8000/')
         table = dynamodb.create_table(TableName="user_profile",KeySchema=[{ 'AttributeName': "uuid", 'KeyType': "HASH" }],AttributeDefinitions=[{ 'AttributeName': "uuid", 'AttributeType': "S" }],ProvisionedThroughput={'ReadCapacityUnits': 1,'WriteCapacityUnits': 1} )
         return table.table_status
     except Exception as e:
