@@ -117,7 +117,7 @@ server.listen(port, () => {
 var http = require("http");
 const execution = http.createServer(handling);
 execution.listen(3001, () => {
-    console.log('HTTP server listening on port 80');
+    console.log('HTTP server listening on port 3001');
 });
 
 const io = require('socket.io')(execution);
