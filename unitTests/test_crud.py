@@ -15,7 +15,7 @@ class TestCreateUser:
         }
         headers = {'Content-Type': 'application/json'}
         response = requests.post(url + "createUser", data=json.dumps(payload), headers=headers)
-        print(response.txt)
+        print(response.text)
         assert response.status_code == 200
 
 class TestGetUser:
