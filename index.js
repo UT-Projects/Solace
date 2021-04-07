@@ -50,23 +50,23 @@ app.put('/updateUser', (req, res) => {
             }
             break;
         case "name":
-            if(req.body.value === "") {
+            if(req.body.value === "" || typeof req.body.value != "string") {
                 res.status(400).send("Invalid Name");
                 return;
             }
             break;
         case "birthdate":
-            if(!Number.isFinite(birthdate)) {
+            if(!Number.isFinite(req.body.value)) {
                 res.status(400).send("Invalid Birthdate");
                 return;
             }
             break;
         case "sex":
-            req.body.value = req.body.value.toLowerCase();
-            if(req.body.value != "male" && req.body.value != "female") {
+            if(typeof req.body.value != "string" || (req.body.value.toLowerCase() != "male" && req.body.value.toLowerCase() != "female")) {
                 res.status(400).send("Invalid Sex");
                 return;
             }
+            req.body.value = req.body.value.toLowerCase();
             break;
         case "email":
             if (!validate.validateEmail(req.body.value)) {
@@ -83,25 +83,25 @@ app.put('/updateUser', (req, res) => {
 });
 
 app.post('/createUser', (req, res) => {
-    [uuid, n, birthdate, sex, email] = [req.body.uuid, req.body.name, req.body.birthdate, req.body.sex.toLowerCase(), req.body.email];
-    
+    [uuid, n, birthdate, sex, email] = [req.body.uuid, req.body.name, req.body.birthdate, req.body.sex, req.body.email];
+
     if(!validate.validateUUIDFormat(uuid))
         res.status(400).send("Invalid UUID");
 
-    else if(n === "")
+    else if(n === "" || typeof n != "string")
         res.status(400).send("Invalid Name");
 
     else if(!Number.isFinite(birthdate))
         res.status(400).send("Invalid Birthdate");
 
-    else if(sex != "male" && sex != "female")
+    else if(typeof sex != "string" || (sex.toLowerCase() != "male" && sex.toLowerCase() != "female"))
         res.status(400).send("Invalid Sex");
 
     else if (!validate.validateEmail(email))
         res.status(400).send("Invalid Email");
 
     else
-        noErrorHandle(res, user.createUser(uuid, n, birthdate, sex, email));
+        noErrorHandle(res, user.createUser(uuid, n, birthdate, sex.toLowerCase(), email));
         
 });
 
