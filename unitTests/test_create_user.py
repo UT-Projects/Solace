@@ -20,11 +20,11 @@ class TestCreateUser:
 
     def test_basic_2(self):
         payload = {
+            "email": "rabbit@wonderland.co.uk",   
+            "birthdate": 367821801.5,
             "uuid": "2e9348d2-91a5-4eac-8419-b03f09772af2",
             "name": "Alice in Wonderland",
-            "birthdate": 367821801.5,
-            "sex": "female",
-            "email": "rabbit@wonderland.co.uk"            
+            "sex": "female"         
         }
         headers = {'Content-Type': 'application/json'}
         response = requests.post(url + "createUser", data=json.dumps(payload), headers=headers)
@@ -157,3 +157,89 @@ class TestCreateUser:
         print(response.content.decode())
         assert response.status_code == 400
         assert response.content.decode() == "Invalid Sex"
+
+    def test_invalid_email_1(self):
+        payload = {
+            "uuid": "0b273193-3746-4ca7-84aa-d181e2a60374",
+            "name": "I have a fake email",
+            "birthdate": 14892753.0,
+            "sex": "female",
+            "email": "this is not a valid email"
+        }
+        headers = {'Content-Type': 'application/json'}
+        response = requests.post(url + "createUser", data=json.dumps(payload), headers=headers)
+        print(response.content.decode())
+        assert response.status_code == 400
+        assert response.content.decode() == "Invalid Email"
+
+    def test_invalid_email_2(self):
+        payload = {
+            "uuid": "d35a45be-9c9f-407d-b8a6-16b707929647",
+            "name": "New Name",
+            "birthdate": 190483275,
+            "sex": "male",
+            "email": "@gmail.com"
+        }
+        headers = {'Content-Type': 'application/json'}
+        response = requests.post(url + "createUser", data=json.dumps(payload), headers=headers)
+        print(response.content.decode())
+        assert response.status_code == 400
+        assert response.content.decode() == "Invalid Email"
+
+    def test_invalid_email_3(self):
+        payload = {
+            "uuid": "66121099-c436-4c88-be1d-046ec8cb01bf",
+            "name": "Another Name",
+            "birthdate": 190403285,
+            "sex": "male",
+            "email": "hello@"
+        }
+        headers = {'Content-Type': 'application/json'}
+        response = requests.post(url + "createUser", data=json.dumps(payload), headers=headers)
+        print(response.content.decode())
+        assert response.status_code == 400
+        assert response.content.decode() == "Invalid Email"
+
+    def test_duplicate_user_1(self):
+        payload = {
+            "uuid": "e3c5e629-5cf5-434d-a7db-a2a69c7cac13",
+            "name": "Jeff Bezos",
+            "birthdate": -188420400.0,
+            "sex": "male",
+            "email": "mynamejeff@amazon.com"            
+        }
+        headers = {'Content-Type': 'application/json'}
+        response = requests.post(url + "createUser", data=json.dumps(payload), headers=headers)
+        assert json.loads(response.content.decode())["code"] == "ConditionalCheckFailedException"
+        assert response.status_code == 500
+
+    def test_duplicate_user_2(self):
+        payload = {
+            "uuid": "e3c5e629-5cf5-434d-a7db-a2a69c7cac13",
+            "name": "Random Name",
+            "birthdate": 18947521.5,
+            "sex": "female",
+            "email": "differentemail@google.com"            
+        }
+        headers = {'Content-Type': 'application/json'}
+        response = requests.post(url + "createUser", data=json.dumps(payload), headers=headers)
+        assert json.loads(response.content.decode())["code"] == "ConditionalCheckFailedException"
+        assert response.status_code == 500
+
+    def test_bad_payload_1(self):
+        payload = {}
+        headers = {'Content-Type': 'application/json'}
+        response = requests.post(url + "createUser", data=json.dumps(payload), headers=headers)
+        print(response.content.decode())
+        assert response.status_code == 400
+    
+    def test_bad_payload_2(self):
+        payload = {
+            "uuid": "7549bccd-24fb-46f7-8686-feceace79d29",
+            "birthdate": 19287496382,
+            "email": "hi@gmail.com"
+        }
+        headers = {'Content-Type': 'application/json'}
+        response = requests.post(url + "createUser", data=json.dumps(payload), headers=headers)
+        print(response.content.decode())
+        assert response.status_code == 400
