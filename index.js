@@ -43,12 +43,6 @@ app.get('/getUser', (req, res) => {
 app.put('/updateUser', (req, res) => {
 
     switch (req.body.key) {
-        case "uuid":
-            if(!validate.validateUUIDFormat(req.body.value)) {
-                res.status(400).send("Invalid UUID");
-                return;
-            }
-            break;
         case "name":
             if(req.body.value === "" || typeof req.body.value != "string") {
                 res.status(400).send("Invalid Name");
